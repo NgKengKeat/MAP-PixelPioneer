@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeName.dart';
-import 'package:pixelpioneer_cpplink/customer/customer_changePassowrd.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_changePassword.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_homePage.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer_register.dart';
+import 'package:pixelpioneer_cpplink/forgotPassword.dart';
 import 'package:pixelpioneer_cpplink/registerType_Page.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_homePage.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_uploadVehicle.dart';
@@ -97,8 +98,8 @@ class MyApp extends StatelessWidget {
         // '/delivery_profilePage': (context) => const DeliveryProfilePage(),
 
 //////////////////forgot password//////////////////
-        // '/forgotPassword': (context) => const ForgotPassword(),
-        // '/otpVerification': (context) => const OTPVerification(),
+        '/forgotPassword': (context) => const ForgotPassword(),
+        //'/otpVerification': (context) => const OTPVerification(),
         // '/resetPassword': (context) => const ResetPassword(),
       },
     );

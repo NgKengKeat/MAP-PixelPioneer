@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               width: 200,
                               height: 200,
-                              child: Image(image:AssetImage('assets/images/cpp_logo.png'), ),
+                              child: const Image(image:AssetImage('assets/images/cpp_logo.png'), ),
                             ),
                           ]),
                     ),
@@ -440,8 +440,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/forgotPassword');
+                              Navigator.of(context).pushReplacementNamed('/forgotPassword');
                             },
                             child: const Text(
                               'Reset password now',
