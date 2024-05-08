@@ -187,7 +187,7 @@ Future<void> getRiderDetail(String userId) async {
 
     // Get user detail
     final userDoc = await FirebaseFirestore.instance
-        .collection('user')
+        .collection('users')
         .doc(id)
         .get();
 
