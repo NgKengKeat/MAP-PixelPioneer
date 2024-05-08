@@ -57,14 +57,6 @@ class _RegisterTypePageState extends State<RegisterTypePage> {
       isLoading = true;
     });
 
-    // Assume user is already logged in and we are just updating the userType
-    // var uid = FirebaseAuth.instance.currentUser?.uid;
-    // if (uid != null) {
-    //   await FirebaseFirestore.instance.collection('users').doc(uid).set({
-    //     'userType': userType,
-    //   }, SetOptions(merge: true));
-    // }
-
     print('go to register form');
     Navigator.of(context).pushReplacementNamed('/customer_registration');
 

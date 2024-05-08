@@ -60,6 +60,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           'phone': _phoneController.text.trim(),
           'email': _emailController.text.trim(), 
           'riderId': '',
+          'adminId': '',
         });
         Navigator.of(context).pushReplacementNamed('/login');
         print('User registered successfully');

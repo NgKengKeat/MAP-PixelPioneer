@@ -9,7 +9,13 @@ import 'package:pixelpioneer_cpplink/customer/customer_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer_register.dart';
 import 'package:pixelpioneer_cpplink/forgotPassword.dart';
 import 'package:pixelpioneer_cpplink/registerType_Page.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_changeName.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_changePassword.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_changePhoneNumber.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_changeProfilePicture.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_changeVehicle.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_homePage.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_uploadVehicle.dart';
 import 'package:pixelpioneer_cpplink/splash_page.dart';
 import 'firebase_options.dart'; // Make sure this is configured with your Firebase options
@@ -43,7 +49,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
-
         '/register_type': (context) => const RegisterTypePage(),
         '/customer_registration': (context) => const CustomerRegisterPage(),
 
@@ -78,12 +83,12 @@ class MyApp extends StatelessWidget {
 
         // rider
         '/rider_home': (context) => const RiderHomePage(),
-        // '/rider_changeName': (context) => const RiderChangeName(),
-        // '/rider_changePw': (context) => const RiderChangePassword(),
-        // '/rider_changePFP': (context) => const RiderChangePicture(),
-        // '/rider_changePhone': (context) => const RiderChangePhone(),
-        // '/rider_profile': (context) => const RiderChangeProfile(),
-        // '/rider_changeVehicle': (context) => const RiderChangeVehicle(),
+        '/rider_changeName': (context) => const RiderChangeName(),
+        '/rider_changePw': (context) => const RiderChangePassword(),
+        '/rider_changePFP': (context) => const RiderChangePicture(),
+        '/rider_changePhone': (context) => const RiderChangePhone(),
+        '/rider_profile': (context) => const RiderChangeProfile(),
+        '/rider_changeVehicle': (context) => const RiderChangeVehicle(),
         '/rider_vehicle': (context) => const RiderUploadVehicle(),
         // '/rider_booking': (context) => const RiderBooking(),
         // '/rider_myRider': (context) => const RiderRiderPage(),
