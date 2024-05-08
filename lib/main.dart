@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_changeName.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_changePassowrd.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_homePage.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_updateProfile.dart';
@@ -63,10 +66,10 @@ class MyApp extends StatelessWidget {
         //customer
         '/customer_home': (context) => const CustomerHomepage(),
         '/customer_profile': (context) => const CustomerProfile(),
-        // '/changeName': (context) => const CustomerChangeName(),
-        // '/changePw': (context) => const CustomerChangePassword(),
+        '/changeName': (context) => const CustomerChangeName(),
+        '/changePw': (context) => const CustomerChangePassword(),
         '/changePFP': (context) => const CustomerChangePicture(),
-        // '/changePhone': (context) => const CustomerChangePhone(),
+        '/changePhone': (context) => const CustomerChangePhone(),
         // '/customer_booking': (context) => const customerBooking(),
         // '/customer_myRider': (context) => const customerRiderPage(),
         // '/customer_checkParcel': (context) => const customerCheckParcel(),
