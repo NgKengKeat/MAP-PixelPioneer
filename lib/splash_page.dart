@@ -38,14 +38,14 @@ class _SplashPageState extends State<SplashPage> {
         } else if (userData['riderId'] != '') {
           print('User is a rider');
           await getData(userID);
-          //await getRiderStatus(); //for checking rider status
-        //await checkDelivery();
-        //await updateListParcel();
+          await getRiderStatus(); //for checking rider status
+          await checkDelivery();
+          await updateListParcel();
           Navigator.of(context).pushReplacementNamed('/rider_home');
         } else {
           print('User is a customer');
           await getData(userID);
-          //await updateListParcel();
+          await updateListParcel();
           Navigator.of(context).pushReplacementNamed('/customer_home');
         }
       } else {

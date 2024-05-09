@@ -5,6 +5,10 @@ import 'package:pixelpioneer_cpplink/admin/admin_changePassword.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_homePage.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_manageParcel.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_quickFind.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_registerParcel.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_updateParcel.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeName.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePassword.dart';
@@ -67,11 +71,11 @@ class MyApp extends StatelessWidget {
         '/admin_changePw': (context) => const AdminChangePassword(),
         '/admin_changePFP': (context) => const AdminChangePicture(),
         '/admin_changePhone': (context) => const AdminChangePhone(),
-        // '/admin_manageParcel': (context) => const AdminManageParcel(),
-        // '/admin_updateParcel': (context) => const AdminUpdateParcel(),
-        // '/admin_registerParcel': (context) => const AdminRegisterParcel(),
+        '/admin_manageParcel': (context) => const AdminManageParcel(),
+        '/admin_updateParcel': (context) => const AdminUpdateParcel(), 
+        '/admin_registerParcel': (context) => const AdminRegisterParcel(),
         // '/admin_manageRider': (context) => const ManageRiderPage(),
-        // '/admin_quickFind': (context) => const AdminQuickFind(),
+        '/admin_quickFind': (context) => const AdminQuickFind(),
         // '/admin_quickFindResult': (context) => const AdminQuickFindResult(),
         // '/admin_scantrackID': (context) => const AdminScanTrackID(),
 
@@ -108,10 +112,7 @@ class MyApp extends StatelessWidget {
         // '/delivery_qrPage': (context) => const QrCodePage(),
         // '/delivery_profilePage': (context) => const DeliveryProfilePage(),
 
-//////////////////forgot password//////////////////
         '/forgotPassword': (context) => const ForgotPassword(),
-        //'/otpVerification': (context) => const OTPVerification(),
-        // '/resetPassword': (context) => const ResetPassword(),
       },
     );
   }

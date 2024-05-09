@@ -110,7 +110,9 @@ bool email_check(String email) {
 
 //name of user exist //! for admin
 Future<bool> user_exist(String name) async {
-  final user = await FirebaseFirestore.instance.collection('user').where('name', isEqualTo: name);
+  final user = await FirebaseFirestore.instance
+      .collection('user')
+      .where('name', isEqualTo: name);
 
   if (user == null) {
     return false;
@@ -138,7 +140,7 @@ String? getID() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
 
-final currentUserID = getID();
+String? currentUserID = getID();
 
 Future<void> getRiderDetail(String customerId) async {
   // Access the Firestore instance
@@ -216,7 +218,7 @@ Future<void> getVehiclePicture(String userId) async {
 
 Future<void> checkBookingStatus(String userId) async {
   // Assuming true, will set to false if any undelivered found
-  bool allDelivered = true; 
+  bool allDelivered = true;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Assuming you have a 'parcels' collection where each document represents a parcel
@@ -229,7 +231,10 @@ Future<void> checkBookingStatus(String userId) async {
         .get();
 
     if (documentSnapshot.docs.isNotEmpty) {
-      print('THE STATUS FOR PARCEL ID : ' + user_booking[i] +' IS ' + documentSnapshot.docs.first.data()['status']);
+      print('THE STATUS FOR PARCEL ID : ' +
+          user_booking[i] +
+          ' IS ' +
+          documentSnapshot.docs.first.data()['status']);
       print('Booking matched and Parcel is delivered!');
     } else {
       print('No Booking matched with this id ' + user_booking[i]);
@@ -247,7 +252,6 @@ Future<void> checkBookingStatus(String userId) async {
     delivered = false;
   }
 }
-
 
 var user_name;
 var user_phone;
@@ -308,20 +312,21 @@ Future<void> getData(String id) async {
         );
       }
 
-       final riderRef = FirebaseFirestore.instance.collection('riders');
+      final riderRef = FirebaseFirestore.instance.collection('riders');
       final querySnapshot = await riderRef.where('userId', isEqualTo: id).get();
       final riderData = querySnapshot.docs.first.data();
       if (riderData['rider_id'] == null) {
-          getVehiclePicture(id);
+        getVehiclePicture(id);
       }
-    
-
     } else {
       print("Document is empty!");
     }
   } else {
     print("No such document!");
   }
+
+  //select all customer parcel with 'arrived' status to display
+  getArrivedParcel(id);
 
   // Get customer parcel delivery request with 'accepted' or 'request' status
   final bookingQuerySnapshot = await FirebaseFirestore.instance
@@ -417,10 +422,11 @@ Future<void> getUserList() async {
 Future<void> getParcelList() async {
   try {
     var querySnapshot = await FirebaseFirestore.instance
-        .collection('parcel')
+        .collection('parcels')
         .orderBy('created_at')
         .get();
     parcel_data = querySnapshot.docs.map((doc) => doc.data()).toList();
+     print('Retrieved parcel data: $parcel_data');
   } catch (e) {
     print("Error getting parcel data: $e");
   }
@@ -477,12 +483,10 @@ var admin_picture;
 var picture_url;
 
 Future<void> getAdminData(dynamic userId) async {
-  // var userId = FirebaseAuth.instance.currentUser!.uid; 
-  var adminRef = FirebaseFirestore.instance.collection('admin') ;
-  var adminQuery = await adminRef
-    .where('user_id', isEqualTo:userId)
-    .limit(1)
-    .get();
+  // var userId = FirebaseAuth.instance.currentUser!.uid;
+  var adminRef = FirebaseFirestore.instance.collection('admin');
+  var adminQuery =
+      await adminRef.where('user_id', isEqualTo: userId).limit(1).get();
 
   if (adminQuery.docs.isNotEmpty) {
     var data = adminQuery.docs.first.data();
@@ -503,6 +507,7 @@ Future<void> getAdminData(dynamic userId) async {
     print('No admin data found');
   }
 }
+
 //!Not sure
 List<Map<String, dynamic>> allRiderParcelListStatus = [];
 List<Map<String, dynamic>> allRiderParcelListUser = [];
@@ -518,17 +523,22 @@ Future<void> getAllRiderParcel() async {
   for (var doc in querySnapshot.docs) {
     var currentData = doc.data();
     if (currentData['status'] == 'delivering') {
-      var bookings = currentData['bookings'] as List; 
+      var bookings = currentData['bookings'] as List;
 
       for (var booking in bookings) {
         if (booking['booking_status'] == "accepted") {
           // Assuming booking_parcel is a subcollection under each booking
-          var bookingDoc = riderCollection.doc(doc.id).collection('bookings').doc(booking['booking_id']);
-          var parcelSnapshot = await bookingDoc.collection('booking_parcel').get();
+          var bookingDoc = riderCollection
+              .doc(doc.id)
+              .collection('bookings')
+              .doc(booking['booking_id']);
+          var parcelSnapshot =
+              await bookingDoc.collection('booking_parcel').get();
 
           List<String> localParcelListID = [];
           for (var parcelDoc in parcelSnapshot.docs) {
-            localParcelListID.add(parcelDoc.id); // Assuming you want the document ID of the parcels
+            localParcelListID.add(parcelDoc
+                .id); // Assuming you want the document ID of the parcels
           }
           booking['parcelList'] = localParcelListID;
           listParcelID.add(localParcelListID);
@@ -542,3 +552,190 @@ Future<void> getAllRiderParcel() async {
   print("List User List : $allRiderParcelListUser");
 }
 
+// bool findParcelStatus = false;
+// String? trackingId;
+// String? customerName;
+// String? customerNumber;
+// DateTime? dateArrived;
+// String? status;
+// String? shelfNumber;
+
+bool findParcelStatus = false;
+var tracking_id;
+var customerName;
+var customerNumber;
+var dateArrived;
+var status;
+var shelf_number;
+
+Future<void> findParcel(dynamic searchParcel) async {
+  try {
+    // Assuming 'parcels' is your collection name and 'tracking_id' is a field
+    var querySnapshot = await FirebaseFirestore.instance
+        .collection('parcels')
+        .where('tracking_id', isEqualTo: searchParcel)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // If at least one document is found
+      var parcelData = querySnapshot.docs.first.data();
+      tracking_id = parcelData['tracking_id'] as String?;
+      customerName = parcelData['name'] as String?;
+      customerNumber = parcelData['phone'] as String?;
+      dateArrived = (parcelData['date_arrived'] as Timestamp?)?.toDate();
+      status = parcelData['status'] as String?;
+      shelf_number = parcelData['shelf_number'] as String?;
+
+      print('My track ID is $tracking_id and the status is $status');
+      findParcelStatus = true;
+    } else {
+      // Reset values if no parcel is found
+      tracking_id = null;
+      customerName = null;
+      customerNumber = null;
+      dateArrived = null;
+      status = null;
+      shelf_number = null;
+      print('Parcel not found for tracking_id: $searchParcel');
+    }
+  } catch (error) {
+    // Handle any errors that occur during fetch operation
+    print('Error fetching parcel data: $error');
+  }
+}
+
+//update parcel data
+var edit_parcel;
+
+Future<bool> parcel_unique(String parcelId) async {
+  // Query Firestore to check if a parcel with the given tracking_id exists
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('parcels')
+      .where('tracking_id', isEqualTo: parcelId)
+      .limit(1) // Limit the results to 1 for efficiency
+      .get();
+
+  // Check if the query returned any documents
+  if (querySnapshot.docs.isEmpty) {
+    return true; // No parcel with this ID, so it's unique
+  } else {
+    return false; // Parcel with this ID exists, so it's not unique
+  }
+}
+
+var booking_index;
+
+List<String> list_name = <String>[];
+List<String> list_phone = <String>[];
+dynamic list_user;
+
+Future<void> userNameList() async {
+  list_name.clear();
+  list_phone.clear();
+
+  try {
+    // Query Firestore to get all users and their names and phones
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    // Iterate over the documents returned by the query
+    for (var doc in querySnapshot.docs) {
+      var data =
+          doc.data() as Map<String, dynamic>?; // Safely cast as a nullable Map
+      if (data != null) {
+
+        String name = data['name'] ?? ''; 
+        String phone = data['phone'] ?? ''; 
+
+        list_name.add(name);
+        list_phone.add(phone);
+      }
+    }
+  } catch (e) {
+    print('Error fetching user list: $e');
+    // Handle errors or empty data cases appropriately here
+  }
+}
+
+// Function to fetch arrived parcels for a specific user
+Future<List<String>> getArrivedParcel(String userId) async {
+  List<String> userParcels = [];
+
+  try {
+    // Query Firestore to find parcels with 'arrived' status for the specified user
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('parcels') 
+        .where('user_id', isEqualTo: userId)
+        .where('status', isEqualTo: 'arrived')
+        .get();
+
+    // Extract tracking IDs from the query results
+    for (var doc in querySnapshot.docs) {
+      var data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('tracking_id')) {
+        userParcels.add(data['tracking_id']);
+      }
+    }
+  } catch (e) {
+    print('Error fetching arrived parcels: $e');
+  }
+
+  return userParcels;
+}
+// Variable to hold the dropdown value, might be initialized elsewhere in your code.
+var dropdownValues;
+
+// Function to update the list of parcels and set the dropdown value
+Future<void> updateListParcel() async {
+  user_parcel = await getArrivedParcel(currentUserID!);
+
+  if (user_parcel.isNotEmpty) {
+    dropdownValues = user_parcel[0];  // Set the first parcel as the default selection
+  } else {
+    dropdownValues = "";  // Set to empty string if no parcels are arrived
+  }
+}
+
+bool isDeliver = false;
+
+Future<void> checkDelivery() async {
+  isDeliver = false;
+  try {
+    // Query Firestore to find accepted bookings for the specific rider ID
+    var riderId = user_rider[0]['rider_id'];  // Ensure this variable has the correct rider ID
+    var deliverySnapshot = await FirebaseFirestore.instance
+        .collection('booking')  // Assumed collection name
+        .where('rider_id', isEqualTo: riderId)
+        .where('booking_status', isEqualTo: 'accepted')
+        .get();
+
+    // Check if any documents are returned
+    isDeliver = deliverySnapshot.docs.isNotEmpty;
+
+  } catch (e) {
+    print("Error checking delivery: $e");
+  }
+}
+/*bool isDeliver = false;
+
+Future<void> checkDelivery() async {
+  isDeliver = false;
+
+  try {
+    // Assume user_rider is a list that contains rider details, and rider_id is a field within
+    var riderId = user_rider[0]['rider_id'];
+    
+    // Query Firestore to find accepted bookings for the specific rider ID
+    var deliverySnapshot = await FirebaseFirestore.instance
+        .collection('booking')  // Adjust if your collection name differs
+        .where('rider_id', isEqualTo: riderId)
+        .where('booking_status', isEqualTo: 'accepted')
+        .get();
+
+    // Check if any documents are returned and set isDeliver accordingly
+    isDeliver = deliverySnapshot.docs.any((doc) => doc.exists);
+
+  } catch (e) {
+    print("Error checking delivery: $e");
+  }
+} */
