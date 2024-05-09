@@ -6,6 +6,7 @@ import 'package:pixelpioneer_cpplink/admin/admin_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_homePage.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_manageParcel.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_manageRider.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_quickFind.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_registerParcel.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_updateParcel.dart';
@@ -15,8 +16,10 @@ import 'package:pixelpioneer_cpplink/customer/customer_changePassword.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_homePage.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_riderPage.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer_register.dart';
+import 'package:pixelpioneer_cpplink/delivery/delivery_homePage.dart';
 import 'package:pixelpioneer_cpplink/forgotPassword.dart';
 import 'package:pixelpioneer_cpplink/registerType_Page.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_changeName.dart';
@@ -25,6 +28,7 @@ import 'package:pixelpioneer_cpplink/rider/rider_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_changeVehicle.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_homePage.dart';
+import 'package:pixelpioneer_cpplink/rider/rider_quickScan.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/rider/rider_uploadVehicle.dart';
 import 'package:pixelpioneer_cpplink/splash_page.dart';
@@ -62,8 +66,6 @@ class MyApp extends StatelessWidget {
         '/register_type': (context) => const RegisterTypePage(),
         '/customer_registration': (context) => const CustomerRegisterPage(),
 
-////////////////////users homepage////////////////
-
         //admin
         '/admin_home': (context) => const AdminHomePage(),
         '/admin_profile': (context) => const AdminProfile(),
@@ -72,9 +74,10 @@ class MyApp extends StatelessWidget {
         '/admin_changePFP': (context) => const AdminChangePicture(),
         '/admin_changePhone': (context) => const AdminChangePhone(),
         '/admin_manageParcel': (context) => const AdminManageParcel(),
-        '/admin_updateParcel': (context) => const AdminUpdateParcel(), 
+        '/admin_updateParcel': (context) => const AdminUpdateParcel(),
         '/admin_registerParcel': (context) => const AdminRegisterParcel(),
-        // '/admin_manageRider': (context) => const ManageRiderPage(),
+        '/admin_manageRider': (context) =>
+            const ManageRiderPage(), //! Need done delivery first
         '/admin_quickFind': (context) => const AdminQuickFind(),
         // '/admin_quickFindResult': (context) => const AdminQuickFindResult(),
         // '/admin_scantrackID': (context) => const AdminScanTrackID(),
@@ -87,12 +90,13 @@ class MyApp extends StatelessWidget {
         '/changePFP': (context) => const CustomerChangePicture(),
         '/changePhone': (context) => const CustomerChangePhone(),
         // '/customer_booking': (context) => const customerBooking(),
-        // '/customer_myRider': (context) => const customerRiderPage(),
-        // '/customer_checkParcel': (context) => const customerCheckParcel(),
+        '/customer_myRider': (context) => const customerRiderPage(),  //! Havent check, dont know where to press
+        //'/customer_checkParcel': (context) => const customerCheckParcel(),
         // '/customer_quickScan': (context) => const customerQuickScan(),
 
         // rider
-        '/rider_home': (context) => const RiderHomePage(),
+        '/rider_home': (context) =>
+            const RiderHomePage(), //!cannot switch to riderMode
         '/rider_changeName': (context) => const RiderChangeName(),
         '/rider_changePw': (context) => const RiderChangePassword(),
         '/rider_changePFP': (context) => const RiderChangePicture(),
@@ -102,11 +106,13 @@ class MyApp extends StatelessWidget {
         '/rider_vehicle': (context) => const RiderUploadVehicle(),
         // '/rider_booking': (context) => const RiderBooking(),
         // '/rider_myRider': (context) => const RiderRiderPage(),
-        // '/rider_checkParcel': (context) => const RiderCheckParcel(),
-        // '/rider_quickScan': (context) => const RiderQuickScan(),
+        //'/rider_checkParcel': (context) => const RiderCheckParcel(),
+        '/rider_quickScan': (context) =>
+            const RiderQuickScan(), //! NEED to check again, no drop down
 
 //////////////////delivery mode//////////////////////
-        // '/delivery_homepage': (context) => const DeliveryHomePage(),
+        '/delivery_homepage': (context) =>
+            const DeliveryHomePage(), //! cannot switch to riderMode from rider_home
         // '/delivery_list': (context) => const DeliveryList(),
         // '/delivery_proof': (context) => const DeliveryProof(),
         // '/delivery_qrPage': (context) => const QrCodePage(),

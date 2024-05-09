@@ -15,7 +15,6 @@ class _RiderHomePageState extends State<RiderHomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool riderMode = false;
 
   void riderModeActive() async {
     setState(() {
@@ -23,7 +22,16 @@ class _RiderHomePageState extends State<RiderHomePage> {
     });
     await getRequestedParcelList();
     await getRiderParcel(user_rider[0]['rider_id']);
-    await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
+    // await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
+    if (user_rider != null && user_rider.isNotEmpty) {
+      try {
+        await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
+      } catch (error) {
+        print('Error updating rider status: $error');
+      }
+    } else {
+      print("user_rider data is not available");
+    }
 
     Navigator.pushNamedAndRemoveUntil(
         context, '/delivery_homepage', (route) => false);
@@ -36,9 +44,9 @@ class _RiderHomePageState extends State<RiderHomePage> {
     await getRequestedParcelList();
     await getRiderParcel(user_rider[0]['rider_id']);
     updateRiderStatus(user_rider[0]['rider_id'], 'delivering');
-    // Navigator.pushNamedAndRemoveUntil(
-    //     context, '/delivery_homepage', (route) => false);
-     Navigator.pushReplacementNamed(context, '/delivery_homepage');
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/delivery_homepage', (route) => false);
+    //  Navigator.pushReplacementNamed(context, '/delivery_homepage');
   }
 
   Future<void> _showConfirmationDialog(bool newValue) async {

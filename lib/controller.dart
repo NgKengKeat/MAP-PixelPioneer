@@ -62,6 +62,7 @@ Future<dynamic> signupRider(var vehicleModel, var vehicleColor, var plateNumber,
       'plate_number': plateNumber.toString().toUpperCase(),
       'vehicle_type': vehicleType.toString().toUpperCase(),
       'picture_url': '',
+      'status': 'offline',
       'created_at': FieldValue.serverTimestamp(),
     });
 
@@ -279,8 +280,85 @@ var rider_color;
 bool? rider_exist;
 bool? delivered;
 
+// Future<void> getData(String id) async {
+//   user_booking = <String>[]; 
+//   user_parcel = <String>[];
+//   selectedValue = null;
+//   rider_exist = false;
+//   delivered = false;
+
+//   // Get user detail
+//   final userDoc =
+//       await FirebaseFirestore.instance.collection('users').doc(id).get();
+
+//   print('id in getData method is: $id');
+//   print(userDoc);
+//   print(userDoc.data());
+
+//   if (userDoc.exists) {
+//     print("Fetched user data: ${userDoc.data()}");
+//     if (userDoc.data() != null) {
+//       Map<String, dynamic> data = userDoc.data()!;
+//       user_name = data['name'];
+//       user_phone = data['phone'];
+//       user_email = data['email'];
+//       user_picture = data['picture_url'];
+
+//       if (user_picture != null) {
+//         picture = Image.network(
+//           user_picture!,
+//           fit: BoxFit.cover,
+//           width: 70,
+//           height: 70,
+//         );
+//       }
+
+//       final riderRef = FirebaseFirestore.instance.collection('riders');
+//       final querySnapshot = await riderRef.where('userId', isEqualTo: id).get();
+//       final riderData = querySnapshot.docs.first.data();
+//       if (riderData['rider_id'] == null) {
+//         getVehiclePicture(id);
+//       }
+//     } else {
+//       print("Document is empty!");
+//     }
+//   } else {
+//     print("No such document!");
+//   }
+
+//   //select all customer parcel with 'arrived' status to display
+//   getArrivedParcel(id);
+
+//   // Get customer parcel delivery request with 'accepted' or 'request' status
+//   final bookingQuerySnapshot = await FirebaseFirestore.instance
+//       .collection('booking')
+//       .where('customer_id', isEqualTo: id)
+//       .where('booking_status', whereIn: ['request', 'accepted']).get();
+
+//   if (bookingQuerySnapshot.docs.isNotEmpty) {
+//     show_row = true;
+//     var bookingData = bookingQuerySnapshot.docs.first;
+//     user_booking_address = bookingData.data()['address'];
+//     user_booking_charge_fee = bookingData.data()['charge_fee'];
+
+//     // Assuming each booking has sub-collection or field of parcels
+//     if (bookingData.data().containsKey('booking_parcel')) {
+//       for (var parcel in bookingData.data()['booking_parcel']) {
+//         user_booking.add(parcel['parcel_id']);
+//       }
+//     }
+
+//     pass_booking_data = bookingData.data();
+//   } else {
+//     show_row = false;
+//     print("no request for this id");
+//   }
+
+//   // Get rider details if needed
+//   getRiderDetail(id);
+// }
 Future<void> getData(String id) async {
-  user_booking = <String>[]; // Reset list
+  user_booking = <String>[]; 
   user_parcel = <String>[];
   selectedValue = null;
   rider_exist = false;
@@ -314,10 +392,14 @@ Future<void> getData(String id) async {
 
       final riderRef = FirebaseFirestore.instance.collection('riders');
       final querySnapshot = await riderRef.where('userId', isEqualTo: id).get();
-      final riderData = querySnapshot.docs.first.data();
-      if (riderData['rider_id'] == null) {
-        getVehiclePicture(id);
-      }
+      if (querySnapshot.docs.isNotEmpty) {
+            final riderData = querySnapshot.docs.first.data();
+            if (riderData['rider_id'] == null) {
+                getVehiclePicture(id);
+            }
+        } else {
+            print("No rider data found for this user");
+        }
     } else {
       print("Document is empty!");
     }
@@ -367,13 +449,13 @@ Future<void> getRiderStatus() async {
 
   final riderDocSnapshot = await FirebaseFirestore.instance
       .collection('riders')
-      .doc(
-          currentUser.uid) // Assuming the rider's document ID is the user's UID
+      .where('userId', isEqualTo:currentUser.uid )
       .get();
 
-  if (riderDocSnapshot.exists && riderDocSnapshot.data() != null) {
-    var riderData = riderDocSnapshot.data()!;
-    if (riderData['status'] != 'false') {
+  if (riderDocSnapshot.docs.isNotEmpty) {
+    var riderDoc = riderDocSnapshot.docs.first;
+    var riderData = riderDoc.data();
+    if (riderData['status'] != 'offline') {
       riderMode = true;
     } else {
       riderMode = false;
@@ -507,15 +589,38 @@ Future<void> getAdminData(dynamic userId) async {
     print('No admin data found');
   }
 }
+var allRider_parcel_list_status = <String>[];
+var allRider_parcel_list_user = [];
+var allRider_parcel_list_booking = [];
+var rider_parcel_list_bookingID = [];
+
+Future<void> getListBookingParcelID(String bookingID) async {
+  rider_parcel_list_bookingID = [];
+  // Assuming 'booking_parcel' is the collection name where you store booking parcel data
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('booking_parcel')
+      .where('booking_id', isEqualTo: bookingID)
+      .get();
+
+  for (var doc in querySnapshot.docs) {
+    var parcelId = doc.data()['parcel_id'];
+    if (parcelId != null) {
+      rider_parcel_list_bookingID.add(parcelId);
+    }
+  }
+  print(rider_parcel_list_bookingID);
+}
+
 
 //!Not sure
-List<Map<String, dynamic>> allRiderParcelListStatus = [];
-List<Map<String, dynamic>> allRiderParcelListUser = [];
+// List<Map<String, dynamic>> allRiderParcelListStatus = [];
+// List<Map<String, dynamic>> allRiderParcelListUser = [];
 List<List<String>> listParcelID = [];
 
 Future<void> getAllRiderParcel() async {
-  listParcelID.clear();
-  allRiderParcelListUser.clear();
+  allRider_parcel_list_status = <String>[];
+  allRider_parcel_list_user = [];
+  allRider_parcel_list_booking = [];
 
   var riderCollection = FirebaseFirestore.instance.collection('riders');
   var querySnapshot = await riderCollection.get();
@@ -544,12 +649,12 @@ Future<void> getAllRiderParcel() async {
           listParcelID.add(localParcelListID);
         }
       }
-      allRiderParcelListUser.add(currentData);
+      allRider_parcel_list_user.add(currentData);
     }
   }
 
   print("List Parcel : $listParcelID");
-  print("List User List : $allRiderParcelListUser");
+  print("List User List : $allRider_parcel_list_user");
 }
 
 // bool findParcelStatus = false;
@@ -658,7 +763,7 @@ Future<void> userNameList() async {
 }
 
 // Function to fetch arrived parcels for a specific user
-Future<List<String>> getArrivedParcel(String userId) async {
+Future<List<String>> getArrivedParcel(dynamic userId) async {
   List<String> userParcels = [];
 
   try {
