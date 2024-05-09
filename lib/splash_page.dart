@@ -27,14 +27,13 @@ class _SplashPageState extends State<SplashPage> {
       String userID = currentUser.uid;
       // Query Firestore to determine user role
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userID).get();
-      
       if (userDoc.exists) {
         var userData = userDoc.data() as Map<String, dynamic>;
         print('User data: $userData');
         // Check for roles
         if (userData != null && userData['adminId'] != null && userData['adminId'] != '') {
           print('User is an admin');
-          //await getAdminData(userID);
+          await getAdminData(userID);
           Navigator.of(context).pushReplacementNamed('/admin_home');
         } else if (userData['riderId'] != '') {
           print('User is a rider');

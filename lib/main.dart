@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_changeName.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_changePassword.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_changePhoneNumber.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_changeProfilePicture.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_homePage.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeName.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePassword.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePhoneNumber.dart';
@@ -55,12 +61,12 @@ class MyApp extends StatelessWidget {
 ////////////////////users homepage////////////////
 
         //admin
-        // '/admin_home': (context) => const AdminHomePage(),
-        // '/admin_profile': (context) => const AdminProfile(),
-        // '/admin_changeName': (context) => const AdminChangeName(),
-        // '/admin_changePw': (context) => const AdminChangePassword(),
-        // '/admin_changePFP': (context) => const AdminChangePicture(),
-        // '/admin_changePhone': (context) => const AdminChangePhone(),
+        '/admin_home': (context) => const AdminHomePage(),
+        '/admin_profile': (context) => const AdminProfile(),
+        '/admin_changeName': (context) => const AdminChangeName(),
+        '/admin_changePw': (context) => const AdminChangePassword(),
+        '/admin_changePFP': (context) => const AdminChangePicture(),
+        '/admin_changePhone': (context) => const AdminChangePhone(),
         // '/admin_manageParcel': (context) => const AdminManageParcel(),
         // '/admin_updateParcel': (context) => const AdminUpdateParcel(),
         // '/admin_registerParcel': (context) => const AdminRegisterParcel(),

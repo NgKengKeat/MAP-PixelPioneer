@@ -469,3 +469,76 @@ Future<void> getRiderParcel(dynamic riderId) async {
     print("Error getting rider parcels: $e");
   }
 }
+
+var admin_name;
+var admin_phone;
+var admin_email;
+var admin_picture;
+var picture_url;
+
+Future<void> getAdminData(dynamic userId) async {
+  // var userId = FirebaseAuth.instance.currentUser!.uid; 
+  var adminRef = FirebaseFirestore.instance.collection('admin') ;
+  var adminQuery = await adminRef
+    .where('user_id', isEqualTo:userId)
+    .limit(1)
+    .get();
+
+  if (adminQuery.docs.isNotEmpty) {
+    var data = adminQuery.docs.first.data();
+    admin_name = data['name'];
+    admin_phone = data['phone'];
+    admin_email = data['email'];
+    picture_url = data['picture_url'];
+
+    if (picture_url != null && picture_url.isNotEmpty) {
+      admin_picture = Image.network(
+        picture_url,
+        fit: BoxFit.cover,
+        width: 70,
+        height: 70,
+      );
+    }
+  } else {
+    print('No admin data found');
+  }
+}
+//!Not sure
+List<Map<String, dynamic>> allRiderParcelListStatus = [];
+List<Map<String, dynamic>> allRiderParcelListUser = [];
+List<List<String>> listParcelID = [];
+
+Future<void> getAllRiderParcel() async {
+  listParcelID.clear();
+  allRiderParcelListUser.clear();
+
+  var riderCollection = FirebaseFirestore.instance.collection('riders');
+  var querySnapshot = await riderCollection.get();
+
+  for (var doc in querySnapshot.docs) {
+    var currentData = doc.data();
+    if (currentData['status'] == 'delivering') {
+      var bookings = currentData['bookings'] as List; 
+
+      for (var booking in bookings) {
+        if (booking['booking_status'] == "accepted") {
+          // Assuming booking_parcel is a subcollection under each booking
+          var bookingDoc = riderCollection.doc(doc.id).collection('bookings').doc(booking['booking_id']);
+          var parcelSnapshot = await bookingDoc.collection('booking_parcel').get();
+
+          List<String> localParcelListID = [];
+          for (var parcelDoc in parcelSnapshot.docs) {
+            localParcelListID.add(parcelDoc.id); // Assuming you want the document ID of the parcels
+          }
+          booking['parcelList'] = localParcelListID;
+          listParcelID.add(localParcelListID);
+        }
+      }
+      allRiderParcelListUser.add(currentData);
+    }
+  }
+
+  print("List Parcel : $listParcelID");
+  print("List User List : $allRiderParcelListUser");
+}
+
