@@ -8,14 +8,18 @@ import 'package:pixelpioneer_cpplink/admin/admin_homePage.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_manageParcel.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_manageRider.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_quickFind.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_quickFindResult.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_registerParcel.dart';
+import 'package:pixelpioneer_cpplink/admin/admin_scanTrackID.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_updateParcel.dart';
 import 'package:pixelpioneer_cpplink/admin/admin_updateProfile.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_bookingPage.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeName.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePassword.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changePhoneNumber.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_changeProfilePicture.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_homePage.dart';
+import 'package:pixelpioneer_cpplink/customer/customer_quickScan.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_riderPage.dart';
 import 'package:pixelpioneer_cpplink/customer/customer_updateProfile.dart';
 import 'package:pixelpioneer_cpplink/customer_register.dart';
@@ -79,8 +83,8 @@ class MyApp extends StatelessWidget {
         '/admin_manageRider': (context) =>
             const ManageRiderPage(), //! Need done delivery first
         '/admin_quickFind': (context) => const AdminQuickFind(),
-        // '/admin_quickFindResult': (context) => const AdminQuickFindResult(),
-        // '/admin_scantrackID': (context) => const AdminScanTrackID(),
+        '/admin_quickFindResult': (context) => const AdminQuickFindResult(),
+        '/admin_scantrackID': (context) => const AdminScanTrackID(),
 
         //customer
         '/customer_home': (context) => const CustomerHomepage(),
@@ -89,14 +93,13 @@ class MyApp extends StatelessWidget {
         '/changePw': (context) => const CustomerChangePassword(),
         '/changePFP': (context) => const CustomerChangePicture(),
         '/changePhone': (context) => const CustomerChangePhone(),
-        // '/customer_booking': (context) => const customerBooking(),
-        '/customer_myRider': (context) => const customerRiderPage(),  //! Havent check, dont know where to press
+        '/customer_booking': (context) => const customerBooking(),  //?Need to check the details for rider
+        '/customer_myRider': (context) => const customerRiderPage(name: '', address: '', trackingNumber: '', price: 0,),  //? previously dont have the argument, check!
         //'/customer_checkParcel': (context) => const customerCheckParcel(),
-        // '/customer_quickScan': (context) => const customerQuickScan(),
+        '/customer_quickScan': (context) => const customerQuickScan(),  //? NO qr code
 
         // rider
-        '/rider_home': (context) =>
-            const RiderHomePage(), //!cannot switch to riderMode
+        '/rider_home': (context) => const RiderHomePage(), //!cannot switch to riderMode
         '/rider_changeName': (context) => const RiderChangeName(),
         '/rider_changePw': (context) => const RiderChangePassword(),
         '/rider_changePFP': (context) => const RiderChangePicture(),
@@ -108,7 +111,7 @@ class MyApp extends StatelessWidget {
         // '/rider_myRider': (context) => const RiderRiderPage(),
         //'/rider_checkParcel': (context) => const RiderCheckParcel(),
         '/rider_quickScan': (context) =>
-            const RiderQuickScan(), //! NEED to check again, no drop down
+            const RiderQuickScan(), //! NEED to check again with real device android camera, no drop down
 
 //////////////////delivery mode//////////////////////
         '/delivery_homepage': (context) =>
@@ -129,9 +132,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to CPPLink'),
+        title: const Text('Welcome to CPPLink'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Main Interface'),
       ),
     );

@@ -5,21 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pixelpioneer_cpplink/controller.dart';
 
-
 import '../main.dart';
 
+// ignore: camel_case_types
 class customerRiderPage extends StatefulWidget {
-  const customerRiderPage({super.key});
+  final String name;
+  final String trackingNumber;
+  final String address;
+  final int price;
+
+  const customerRiderPage({
+    Key? key,
+    required this.name,
+    required this.trackingNumber,
+    required this.address,
+    required this.price,
+  }) : super(key: key);
 
   @override
   State<customerRiderPage> createState() => customerBbookingState();
 }
 
-class customerBbookingState extends State<customerRiderPage> {
+// ignore: camel_case_types
+class customerBbookingState extends State<customerRiderPage> 
+{
   bool isImageSelected = false;
   XFile? fileImage;
-  File? imageFile; 
+  File? imageFile;
+  String user_name="";
   final currentuser = FirebaseAuth.instance.currentUser?.uid;
+  List<String> parcelTrackingIds = [];
+
   void getImage() async {
     final XFile? pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -34,48 +50,16 @@ class customerBbookingState extends State<customerRiderPage> {
     });
   }
 
-  updateData() async {
-    await getRiderDetail(currentUserID!);
-    await checkBookingStatus(currentUserID!);
-    if (mounted) {
-      setState(() {
-        rider_exist;
-        show_row;
-        delivered;
-        vehicle_picture;
-        vehicle_url;
-        rider_name;
-        rider_vehicleType;
-        rider_plate;
-        rider_model;
-        rider_color;
-      });
-      if (delivered == true) {
-        Navigator.of(context).pushReplacementNamed('/customer_home');
-      }
-    }
-  }
-    
+ 
+
+
+
   @override
-  void initState() {
+  void initState() 
+  {
     super.initState();
-    if (mounted) {
-      subscribeToBookings();
-    }
   }
 
-void subscribeToBookings() {
-  FirebaseFirestore.instance.collection('bookings')
-    .snapshots()
-    .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        print('Change received: ${snapshot.docs.map((doc) => doc.data()).toList()}');
-        updateData();
-      }
-    }).onError((error) {
-      print('Error listening to changes: $error');
-    });
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,8 +77,8 @@ void subscribeToBookings() {
         ),
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back, // You can replace this with your custom logo
-            color: Colors.white, // Icon color
+            Icons.arrow_back, 
+            color: Colors.white, 
           ),
           onPressed: () {
             Navigator.of(context).pushReplacementNamed('/customer_home');
@@ -176,7 +160,7 @@ void subscribeToBookings() {
                                 ),
                               ),
                               Text(
-                                '${user_booking.join(', ')}',
+                                widget.trackingNumber,
                                 style: const TextStyle(
                                   color: Color(0xFF333333),
                                   fontSize: 17,
@@ -201,7 +185,7 @@ void subscribeToBookings() {
                               ),
                             ),
                             Text(
-                              user_booking_address.toString(),
+                              widget.address,
                               style: const TextStyle(
                                 color: Color(0xFF333333),
                                 fontSize: 17,
@@ -225,7 +209,7 @@ void subscribeToBookings() {
                               ),
                             ),
                             Text(
-                              user_name,
+                              widget.name,
                               style: const TextStyle(
                                 color: Color(0xFF333333),
                                 fontSize: 17,
@@ -302,14 +286,14 @@ void subscribeToBookings() {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          rider_name, // Replace with actual data
+                                          rider_name, 
                                           style: const TextStyle(
                                             color: Color(0xFF333333),
                                             fontSize: 17,
                                             fontFamily: 'Roboto',
                                             fontWeight: FontWeight.w700,
                                             height:
-                                                1.2, // Adjust the height as needed
+                                                1.2,
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -379,7 +363,7 @@ void subscribeToBookings() {
                   height: 40,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text(
                       'Total Charge : ',
@@ -403,7 +387,7 @@ void subscribeToBookings() {
                       ),
                     ),
                     Text(
-                      user_booking_charge_fee.toString(),
+                      widget.price.toString(),
                       style: const TextStyle(
                         color: Color.fromARGB(255, 14, 173, 19),
                         fontSize: 30,
@@ -425,6 +409,8 @@ void subscribeToBookings() {
                   ],
                 ),
                 const SizedBox(height: 10),
+                /////////////////////////////
+                ////////////////////////////////
               ],
             ),
           ),
